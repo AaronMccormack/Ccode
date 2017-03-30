@@ -1,0 +1,76 @@
+// zork tribute.c
+
+#include "stdio.h"
+#define DOOR 1
+#define WINDOW 2
+
+void main()
+{
+	int objInt = 0;
+	int escapeStay = 0;
+	int attackNo = 0;
+	int openStay = 0;
+	int lightNo = 0;
+
+	printf("You find yourself at a haunted house, do you wish to enter by door or window? <Type 1 for door or 2 for window> \n");
+	scanf_s("%d", &objInt);
+
+	switch (objInt)
+	{
+	case DOOR:
+	{
+		printf("You are standing in a long, dark hallway.\n");
+		printf("Do you wish to turn on the light? <Enter 3 for yes or 4 for no> \n");
+		scanf_s("%d", &lightNo);
+
+		if (lightNo == 3)
+		{
+			printf("The monster is startled.Run? <Enter 8 for escape or 9 for stay> \n");
+			scanf_s("%d", &escapeStay);
+
+			if (escapeStay == 8)
+			{
+				printf("You run out of the house and successfully escape!\n");
+			}
+			else
+			{
+				printf("The monster catches you! You lose!\n");
+			}
+		}
+		else
+		{
+			printf("The monster finds you in the darkness. You lose! \n");
+		}
+		break;
+	}
+
+	case WINDOW:
+	{
+		printf("You find yourself in a dimly lit place, it appears to be a bedroom.\n");
+		printf("Do you wish to open the door? <Enter 5 for open or 6 for stay.> \n ");
+		scanf_s("%d", &openStay);
+
+		if (openStay == 5)
+		{
+			printf("You find a weapon. \n");
+			printf("You sneak up behind the monster. <Enter 10 to attack or 11 to run.> \n");
+			scanf_s("%d", &attackNo);
+
+			if (attackNo == 10)
+			{
+				printf("You defeat the monster, congratulations! You win!\n");
+			}
+			else
+			{
+				printf("The monster catches you anyway. You lose!\n");
+			}
+		}
+
+		if (openStay == 6)
+		{
+			printf("The monster senses you in the room and captures you! You lose! \n");
+		}
+		break;
+	}
+	}
+}
