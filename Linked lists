@@ -1,0 +1,121 @@
+// Week22Assignment.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+struct athlete
+{
+	char name[40];
+	int age;
+	char country[30];
+	int year;
+	char sport[25];
+	int gold;
+	int silver;
+	int bronze;
+	int total;
+	struct athlete *next;
+};
+
+struct athlete *first;
+int readFile(char *FileName);
+void findAthlete(int inputYear, char *inputSport);
+
+int main(int argc, char *argv[])
+{
+	char FileName[] = "C:\\Users\\aaron\\Desktop\\athleteslab\\athleteslab\\athletes.txt";
+	int inputYear = atoi(argv[1]);
+	char *inputSport = argv[2];
+
+
+	struct athlete *current;
+
+	if (!readFile(FileName))
+	{
+		printf("Error, file not found!\n");
+		return 0;
+	}
+
+	current = first;
+	printf("Name\t\t Age\t \tCountry\t\t Gold\t\t Silver\t\t Bronze\t\t Total\n-------------------------------------------------------------------------\n");
+	findAthlete(inputYear, inputSport);
+	current = current->next;
+
+	return 0;
+}
+
+
+int readFile(char *FileName)
+{
+	char line[400];
+	FILE *fptr = fopen(FileName, "r");
+	char *token;
+	char tab[2] = "\t";
+
+	struct athlete *last = NULL;
+	struct athlete *current = NULL;
+
+	if (fptr == NULL)
+	{
+		printf("Error opening file!\n");
+		return 0;
+	}
+
+
+	while (!feof(fptr))
+	{
+
+		fgets(line, 399, fptr);
+
+		if (first == NULL)
+		{
+			first = (struct athlete *)malloc(sizeof(struct athlete));
+			first->next = NULL;
+			current = first;
+		}
+		else
+		{
+			last = (struct athlete *)malloc(sizeof(struct athlete));
+			current->next = last;
+			current = last;
+			current->next = NULL;
+		}
+		if ((token = strtok(line, tab)) != NULL) strcpy(current->name, token);
+		if ((token = strtok(NULL, tab)) != NULL) current->age = atoi(token);
+		if ((token = strtok(NULL, tab)) != NULL) strcpy(current->country, token);
+		if ((token = strtok(NULL, tab)) != NULL) current->year = atoi(token);
+		if ((token = strtok(NULL, tab)) != NULL) strcpy(current->sport, token);
+		if ((token = strtok(NULL, tab)) != NULL) current->gold = atoi(token);
+		if ((token = strtok(NULL, tab)) != NULL) current->silver = atoi(token);
+		if ((token = strtok(NULL, tab)) != NULL) current->bronze = atoi(token);
+		if ((token = strtok(NULL, tab)) != NULL) current->total = atoi(token);
+	}
+	fclose(fptr);
+
+	return 1;
+}
+
+void findAthlete(int inputYear, char *inputSport)
+{
+	struct athlete *current;
+
+	current = first;
+
+	while (current != NULL)
+	{
+		if (current->year == inputYear && strcmp(current->sport, inputSport) == 0)
+		{
+			printf("%20s\t\t%d\t%30s\t\t%d\t%d\t%d\t%d\t\n", current->name, current->age, current->country, current->gold, current->silver, current->bronze, current->total);
+			current = current->next;
+		}
+
+		else
+		{
+			current = current->next;
+		}
+
+	}
+}
