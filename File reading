@@ -1,0 +1,90 @@
+#include "stdafx.h"
+#include <stdio.h>
+#include "stdlib.h"
+#include "time.h"
+
+FILE *openFile(char *fileName, char *mode);
+void closeFile(FILE *fptr);
+double randBal();
+
+struct idBal
+{
+	int iD;
+	double bal;
+}idBal;
+
+
+void main(void)
+{
+	srand((unsigned)time(NULL));
+	struct idBal idBals[100];
+
+	FILE *fptr;
+	FILE *bfptr;
+	fptr = openFile("C:\\Users\\16492186\\Labs balances ids\\numbers.txt", "r");
+	int i;
+
+	for (i = 0; i < 15; i++)
+	{
+		fscanf(fptr, "%d %lf", &idBals[i].iD, &idBals[i].bal);
+	}
+	closeFile(fptr);
+
+	for (i = 0; i < 15; i++)
+	{
+		printf("%d \t %.2lf\n", idBals[i].iD, idBals[i].bal);
+	}
+	
+	bfptr = openFile("C:\\Users\\16492186\\Labs balances ids\\numbers2.txt", "w");
+	
+	for (i = 0; i < 100; i++)
+	{
+		fprintf(bfptr, "%d \t %.2lf\n", i, randBal());
+	}
+
+	closeFile(bfptr);
+
+	bfptr = openFile("C:\\Users\\16492186\\Labs balances ids\\numbers2.txt", "r");
+
+	for (i = 0; i < 100; i++)
+	{
+		fscanf(fptr, "%d %lf", &idBals[i].iD, &idBals[i].bal);
+	}
+
+	closeFile(bfptr);
+	printf("\n\n");
+	printf("____ACCOUNTS____WITH____NEGATIVE____BALANCES____\n");
+	printf("\n");
+	for (i = 0; i < 100; i++)
+	{
+		if (idBals[i].bal < 0)
+		{
+			printf("%d \t %.2lf\n", idBals[i].iD, idBals[i].bal);
+		}
+	}
+}
+
+FILE * openFile(char *fileName, char *mode)
+{
+
+	FILE *fptr = fopen(fileName, mode);
+
+	if (fptr == NULL)
+	{
+		printf("Error opening file! \n");
+	}
+
+	return fptr;
+}
+
+void closeFile(FILE *fptr)
+{
+	fclose(fptr);
+}
+
+double randBal()
+{
+	double randomBal;
+	randomBal = rand()%(50000)-10000;
+	return randomBal;
+}
